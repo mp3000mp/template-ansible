@@ -1,0 +1,15 @@
+---
+- name: Install utils
+  apt:
+    name:
+      - vim
+      - curl
+      - zip
+      - unzip
+      - tree
+      - wget
+      - net-tools
+      - telnet
+    state: latest
+    update_cache: yes
+...
