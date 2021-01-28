@@ -2,6 +2,7 @@
 - name: Install utils
   apt:
     name:
+      - tmux
       - vim
       - curl
       - zip

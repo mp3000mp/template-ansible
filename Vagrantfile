@@ -40,6 +40,7 @@ Vagrant.configure("2") do |config|
   # argument is a set of non-required options.
   config.vm.synced_folder "./app/public", "/var/www/html"
   config.vm.synced_folder "./ansible", "/home/vagrant/ansible"
+  config.vm.synced_folder "./docker", "/home/vagrant/docker"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -68,6 +69,9 @@ Vagrant.configure("2") do |config|
     sudo echo "alias cda='cd /etc/apache2/sites-available'" >> /root/.profile
     sudo echo "alias ll='ls -la'" >> /root/.profile
     sudo echo "alias cc='php bin/console cache:clear'" >> /root/.profile
+
+    tmux
+
   SHELL
 
 
