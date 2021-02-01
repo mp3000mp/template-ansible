@@ -1,3 +1,4 @@
 .vagrant/
 ansible/install.retry
-/docker/
+
+/docker/volumes/*

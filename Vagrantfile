@@ -38,7 +38,8 @@ Vagrant.configure("2") do |config|
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-  config.vm.synced_folder "./app/public", "/var/www/html"
+  config.vm.synced_folder "./docker/volumes/app", "/var/www/html"
+  config.vm.synced_folder "./docker/volumes/mariadb/db", "/var/db/mariadb"
   config.vm.synced_folder "./ansible", "/home/vagrant/ansible"
   config.vm.synced_folder "./docker", "/home/vagrant/docker"
 
@@ -70,7 +71,7 @@ Vagrant.configure("2") do |config|
     sudo echo "alias ll='ls -la'" >> /root/.profile
     sudo echo "alias cc='php bin/console cache:clear'" >> /root/.profile
 
-    tmux
+    sudo echo "tmux" >> /home/vagrant/.profile
 
   SHELL
 
