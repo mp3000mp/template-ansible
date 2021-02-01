@@ -11,6 +11,7 @@
       - wget
       - net-tools
       - telnet
+      - nmap
     state: latest
     update_cache: yes
 ...
