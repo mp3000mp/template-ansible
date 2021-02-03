@@ -12,7 +12,9 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
-  config.vm.box = "debian/buster64"
+#  config.vm.box = "generic/debian10"
+#  config.vm.box = "debian/buster64"
+  config.vm.box = "ubuntu/xenial64"
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
@@ -38,7 +40,7 @@ Vagrant.configure("2") do |config|
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-  config.vm.synced_folder "./docker/volumes/", "/home/vagrant/volumes"
+  config.vm.synced_folder "./docker/volumes", "/home/vagrant/volumes"
   config.vm.synced_folder "./ansible", "/home/vagrant/ansible"
   config.vm.synced_folder "./docker", "/home/vagrant/docker"
 

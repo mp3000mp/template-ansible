@@ -5,14 +5,15 @@ services:
     container_name: mariadb
     image: mariadb:10.4
     restart: on-failure
-#    volumes:
-#      - ./volumes/mariadb/db:/var/lib/mysql
-#      - ./volumes/mariadb/conf:/etc/mysql/conf.d
+    volumes:
+      - ./volumes/mariadb/db:/var/lib/mysql
+      - ./volumes/mariadb/conf:/etc/mysql/conf.d
     environment:
+#      MYSQL_INITDB_SKIP_TZINFO: 1
       MYSQL_ROOT_PASSWORD: secret
+#      MYSQL_DATABASE: salut
 #      MYSQL_USER: user1
 #      MYSQL_PASSWORD: password1
-#      MYSQL_DATABASE: testdb1
 
   redis:
     container_name: redis
@@ -25,8 +26,8 @@ services:
     restart: on-failure
     ports:
       - '8080:8080'
-#    depends_on:
-#      - mariadb
+    depends_on:
+      - mariadb
 
   php_apache:
     container_name: php_apache
@@ -35,10 +36,11 @@ services:
     ports:
       - "80:80"
     volumes:
+      - ./volumes/php/conf:/usr/local/etc/php/conf.d
       - ./volumes/app:/var/www/html
       - ./volumes/apache/sites-enabled:/etc/apache2/sites-enabled
-#    depends_on:
-#      - mariadb
+    depends_on:
+      - mariadb
 
   maildev:
     container_name: maildev

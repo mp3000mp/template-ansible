@@ -1,4 +1,7 @@
 .vagrant/
 ansible/install.retry
 
-/docker/volumes/*
+/docker/volumes/mariadb/db
+/docker/volumes/redis/db
+
+/*.log
