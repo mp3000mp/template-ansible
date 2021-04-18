@@ -1,9 +1,0 @@
----
-- name: Ansible start
-  hosts: localhost
-  connection: local
-  become: true
-  roles:
-    - role: utils
-    - role: docker
-...

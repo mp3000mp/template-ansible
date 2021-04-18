@@ -1,0 +1,31 @@
+- name: Ensure snapd is installed.
+  package:
+    name: snapd
+    state: present
+  register: snapd_install
+
+- name: Ensure snapd is enabled.
+  systemd:
+    name: snapd.socket
+    enabled: true
+
+- name: Update snap after install.
+  shell:
+    cmd: snap install core; snap refresh core
+  when: snapd_install is changed
+
+- name: Install certbot via snap.
+  snap:
+    name: certbot
+    classic: true
+
+- name: Symlink certbot into place.
+  file:
+    src: /snap/bin/certbot
+    dest: /usr/bin/certbot
+    state: link
+
+# on vire ?
+#- name: Set Certbot script variable.
+#  set_fact:
+#    certbot_script: /usr/bin/certbot

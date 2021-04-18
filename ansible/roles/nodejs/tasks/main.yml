@@ -1,0 +1,28 @@
+- name: Install nvm
+  shell:
+    cmd: "export HOME=/home/{{ item }}; curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash"
+    warn: false
+    creates: "/home/{{ item }}/.nvm/nvm.sh"
+  loop: "{{ users }}"
+
+- name: Chown chmod nvm
+  file:
+    path: "/home/{{ item }}/.nvm/nvm.sh"
+    mode: 'u+x,g+x'
+  loop: "{{ users }}"
+
+# marche po, faire à la main nvm install --lts
+#- name: Install nodejs
+#  shell: "source /home/{{ item }}/.nvm/nvm.sh && /home/{{ item }}/.nvm/nvm.sh install --lts"
+#  args:
+#    executable: /bin/bash
+#  loop: "{{ users }}"
+
+- name: Chown chmod nvm
+  file:
+    path: "/home/{{ item }}/.nvm"
+    group: "{{ item }}"
+    owner: "{{ item }}"
+    mode: 'u=rwX,g=rX,o=rX'
+    recurse: true
+  loop: "{{ users }}"

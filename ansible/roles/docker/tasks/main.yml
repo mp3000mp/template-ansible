@@ -1,62 +1,60 @@
----
-- name: install docker dependencies
+- name: Install common dependencies
   apt:
-    name:
-      - apt-transport-https
-      - ca-certificates
-      - gnupg-agent
-      - software-properties-common
-    state: present
+    name: "{{ item }}"
+    state: latest
+    update_cache: true
+  loop:
+    - 'apt-transport-https'
+    - 'ca-certificates'
+    - 'curl'
+    - 'software-properties-common'
+    - 'gnupg'
+    - 'lsb-release'
 
-- name: add docker repo apt key
+- name: Add Docker GPG apt Key
   apt_key:
     url: https://download.docker.com/linux/debian/gpg
-    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
     state: present
-  register: add_repository_key
-  ignore_errors: true
 
-- name: add Docker repository
+- name: Add Docker Repository
   apt_repository:
-    repo: '{{ docker_apt_repository }}'
+    repo: "deb https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
     state: present
     update_cache: true
 
-- name: install docker
+- name: Install docker
   apt:
-    name: 'docker-ce'
-    state: present
+    name: "{{ item }}"
+    state: latest
+    update_cache: true
+  loop:
+    - 'docker-ce'
+    - 'docker-ce-cli'
+    - 'containerd.io'
 
-- name: enable docker systemd service
+- name: Enable docker systemd service
   service:
     name: docker
     state: started
     enabled: true
 
-- name: prepare default daemon configuration
-  copy:
-    src: daemon.json
-    dest: /etc/docker/daemon.json
-
-- name: set periodic docker system prune
+- name: Set periodic docker system prune
   cron:
     name: docker-prune
-    minute: 0
+    minute: '0'
     hour: '*/2'
     job: 'docker container prune -f'
 
-- name: add users to docker group
+- name: Install docker-compose
+  get_url:
+    url: "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-{{ ansible_system }}-{{ ansible_architecture }}"
+    dest: /usr/local/bin/docker-compose
+    group: docker
+    mode: 'u+x,g+x'
+
+- name: Add users in docker group
   user:
-    name: '{{ item }}'
+    name: "{{ item }}"
     groups: docker
     append: true
-  with_items: '{{ docker_group_members }}'
-  when: 'docker_group_members is defined'
-
-- name: Install docker-compose
-  apt:
-    name: docker-compose
-    state: present
-  tags:
-    - docker
-...
+  loop: "{{ users }}"

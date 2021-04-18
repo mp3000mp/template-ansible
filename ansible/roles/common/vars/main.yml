@@ -1,0 +1,5 @@
+aliases:
+  - 'll="ls -la"'
+  - 'cdw="cd /var/www"'
+  - 'cda="cd /etc/apache2/sites-available"'
+  - 'dcx="docker-compose exec"'
