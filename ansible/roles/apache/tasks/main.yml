@@ -12,6 +12,7 @@
     state: present
   loop:
     - 'proxy'
+    - 'proxy_http'
     - 'rewrite'
     - 'ssl'
   notify:

@@ -24,7 +24,6 @@
 
 - name: Add root util aliases
   lineinfile:
-# path: "/root/.bash_aliases"
     path: "/root/.bashrc"
     line: "alias {{ item }}"
     state: present

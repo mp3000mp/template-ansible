@@ -1,0 +1,28 @@
+# nvm bad idea for remote server
+
+- name: Install nvm
+  shell:
+    cmd: "export HOME=/home/{{ item }}; curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash"
+    warn: false
+    creates: "/home/{{ item }}/.nvm/nvm.sh"
+  loop: "{{ users }}"
+
+- name: Chmod nvm executable
+  file:
+    path: "/home/{{ item }}/.nvm/nvm.sh"
+    mode: 'u+x,g+x'
+  loop: "{{ users }}"
+
+- name: Install node lts
+  shell:
+    cmd: /bin/bash -c "source /home/{{ item }}/.nvm/nvm.sh; nvm install --lts; nvm use --lts"
+  loop: "{{ users }}"
+
+- name: Chown chmod nvm
+  file:
+    path: "/home/{{ item }}/.nvm"
+    group: "{{ item }}"
+    owner: "{{ item }}"
+    mode: 'u=rwX,g=rX,o=rX'
+    recurse: true
+  loop: "{{ users }}"
