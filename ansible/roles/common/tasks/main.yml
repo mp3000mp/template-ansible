@@ -11,6 +11,8 @@
     - 'gnupg'
     - 'lsb-release'
     - 'net-tools'
+    - 'python3-pip'
+    - 'rsync'
     - 'software-properties-common'
     - 'telnet'
     - 'tmux'

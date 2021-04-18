@@ -5,18 +5,16 @@
     creates: "/home/{{ item }}/.nvm/nvm.sh"
   loop: "{{ users }}"
 
-- name: Chown chmod nvm
+- name: Chmod nvm executable
   file:
     path: "/home/{{ item }}/.nvm/nvm.sh"
     mode: 'u+x,g+x'
   loop: "{{ users }}"
 
-# marche po, faire à la main nvm install --lts
-#- name: Install nodejs
-#  shell: "source /home/{{ item }}/.nvm/nvm.sh && /home/{{ item }}/.nvm/nvm.sh install --lts"
-#  args:
-#    executable: /bin/bash
-#  loop: "{{ users }}"
+- name: Install node lts
+  shell:
+    cmd: /bin/bash -c "source /home/{{ item }}/.nvm/nvm.sh; nvm install --lts; nvm use --lts"
+  loop: "{{ users }}"
 
 - name: Chown chmod nvm
   file:

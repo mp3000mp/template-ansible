@@ -1,4 +1,3 @@
-app_directory: /var/www/auto-entreprise
 users:
   - 'user1'
   - 'user2'

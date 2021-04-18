@@ -4,6 +4,11 @@
 
 In progress
 
+## Requirements
+
+ - Ansible >2.9 configured with python3
+ - Only debian10 remote servers
+
 ```
 ansible-playbook -i inventory/hosts server_setup.yml
 ```

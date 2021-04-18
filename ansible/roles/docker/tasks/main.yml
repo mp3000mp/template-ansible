@@ -31,6 +31,7 @@
     - 'docker-ce'
     - 'docker-ce-cli'
     - 'containerd.io'
+    - 'python3-pip'
 
 - name: Enable docker systemd service
   service:
@@ -58,3 +59,11 @@
     groups: docker
     append: true
   loop: "{{ users }}"
+
+- name: Install python docker sdk
+  pip:
+    name: "{{ item }}"
+    executable: /usr/bin/pip3
+  loop:
+    - 'docker'
+    - 'docker-compose'
