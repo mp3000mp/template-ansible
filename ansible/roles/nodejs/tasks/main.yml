@@ -1,6 +1,6 @@
 - name: Add ppa
   shell:
-    cmd: "curl -fsSL https://deb.nodesource.com/setup_14.x | bash -"
+    cmd: "curl -fsSL https://deb.nodesource.com/setup_16.x | bash -"
     warn: false
     creates: "/usr/share/keyrings/nodesource.gpg"
 
