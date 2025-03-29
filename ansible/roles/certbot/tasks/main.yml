@@ -1,26 +1,36 @@
-- name: Ensure snapd is installed
+- name: Install Certbot
+  package: "name=certbot state=present"
+
+- name: Install Certbot Apache plugin
   package:
-    name: snapd
+    name: python3-certbot-apache
     state: present
-  register: snapd_install
 
-- name: Ensure snapd is enabled
-  systemd:
-    name: snapd.socket
-    enabled: true
+- name: Add cron job for certbot renewal (if configured)
+  cron:
+    name: "Certbot automatic renewal"
+    minute: "0"
+    hour: "4"
+    day: "11"
+    job: "certbot renew --quiet"
 
-- name: Update snap after install
-  shell:
-    cmd: snap install core; snap refresh core
-  when: snapd_install is changed
+- name: Ensure Certbot is installed
+  command: certbot --version
+  register: certbot_version
+  ignore_errors: yes
 
-- name: Install certbot via snap
-  snap:
-    name: certbot
-    classic: true
+- name: Display Certbot version
+  debug:
+    var: certbot_version.stdout_lines
 
-- name: Symlink certbot into place
+- name: Ensure correct ownership of Certbot directories
+  become: true
   file:
-    src: /snap/bin/certbot
-    dest: /usr/bin/certbot
-    state: link
+    path: "{{ item }}"
+    owner: root
+    group: www-data
+    state: directory
+    mode: "0750"
+  loop:
+    - /etc/letsencrypt/live
+    - /etc/letsencrypt/archive

@@ -4,41 +4,61 @@
     state: latest
     update_cache: true
   loop:
-    - 'apt-transport-https'
     - 'ca-certificates'
+    - 'cron'
     - 'curl'
     - 'git'
     - 'gnupg'
     - 'lsb-release'
     - 'net-tools'
-    - 'python3-pip'
     - 'rsync'
     - 'software-properties-common'
     - 'telnet'
     - 'tmux'
     - 'tree'
-    - 'unzip'
     - 'vim'
     - 'wget'
-    - 'zip'
 
-- name: Add root util aliases
-  lineinfile:
+- name: Ensure .bash_aliases exists for root user
+  copy:
+    dest: "/root/.bash_aliases"
+    content: "{{ lookup('file', '.bash_aliases') }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+
+- name: Ensure .bashrc sources .bash_aliases for root user
+  blockinfile:
     path: "/root/.bashrc"
-    line: "alias {{ item }}"
-    state: present
-    create: true
-  loop: "{{ aliases }}"
+    block: |
+      if [ -f ~/.bash_aliases ]; then
+          . ~/.bash_aliases
+      fi
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - Source .bash_aliases"
+    insertafter: EOF
+    owner: "root"
+    group: "root"
+    mode: "0644"
 
-- name: Add user util aliases
-  lineinfile:
-    path: "/home/{{ item[0] }}/.bash_aliases"
-    line: "alias {{ item[1] }}"
-    state: present
-    create: true
-    owner: "{{ item[0] }}"
-    group: "{{ item[0] }}"
-    mode: '644'
-  with_nested:
-    - "{{ users }}"
-    - "{{ aliases }}"
+- name: Ensure .bash_aliases exists for {{ item }} user
+  copy:
+    dest: "/home/{{ item }}/.bash_aliases"
+    content: "{{ lookup('file', '.bash_aliases') }}"
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: "0644"
+  with_items: "{{ users }}"
+
+- name: Ensure .bashrc sources .bash_aliases for {{ item }} user
+  blockinfile:
+    path: "/home/{{ item }}/.bashrc"
+    block: |
+      if [ -f ~/.bash_aliases ]; then
+          . ~/.bash_aliases
+      fi
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - Source .bash_aliases"
+    insertafter: EOF
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: "0644"
+  with_items: "{{ users }}"

@@ -1,8 +1,0 @@
-aliases:
-  - 'll="ls -la"'
-  - 'cdw="cd /var/www"'
-  - 'cda="cd /etc/apache2/sites-available"'
-  - 'cdl="cd /var/log"'
-  - 'dcx="docker-compose exec"'
-  - 'sat="apache2ctl -t"'
-  - 'sar="sudo service apache2 restart"'

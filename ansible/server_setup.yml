@@ -5,8 +5,7 @@
   vars_files:
     - vars.yml
   roles:
-    - common
-    - nodejs
-    - docker
-    - apache
+#    - common
+#    - docker
+#    - apache
     - certbot
